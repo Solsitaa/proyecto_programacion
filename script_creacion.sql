@@ -14,11 +14,11 @@ use echotech_db;
 
 CREATE TABLE Empleado(
     id_empleado integer auto_increment,
-    nombre_empleado VARCHAR2(100) CONSTRAINT nombre_empleado_nn NOT NULL,
-    x VARCHAR2(100) CONSTRAINT apellido_empleado_nn NOT NULL,
+    nombre_empleado varchar(100) not null,
+    apellido_empleado varchar(100) not null,
     direccion VARCHAR(100),
-    numero_de_telefono VARCHAR2(15),
-    correo VARCHAR2(200),
+    numero_de_telefono varchar(15),
+    correo varchar(200),
     fecha_contrato DATE,
     salario NUMBER,
     primary key (id_empleado)
@@ -26,9 +26,9 @@ CREATE TABLE Empleado(
 
 CREATE TABLE Usuario(
     id_usuario integer auto_increment,
-    nombre_usuario VARCHAR2(100) CONSTRAINT nombre_usuario_nn NOT NULL,
-    contraseña VARCHAR2(100) CONSTRAINT contraseña_nn NOT NULL,
-    id_empleado VARCHAR2(12) not null,
+    nombre_usuario varchar(100)  not null,
+    contraseña varchar(100) not null,
+    id_empleado varchar(12) not null,
     constraint id_empleado_fk foreign key (id_empleado)
     references Empleado(id_empleado)
     primary key (id_usuario)
@@ -36,16 +36,16 @@ CREATE TABLE Usuario(
 
 CREATE TABLE Rol(
     id_rol integer auto_increment,
-    nombre_rol VARCHAR2(100) CONSTRAINT nombre_rol_nn NOT NULL,
-    descripcion VARCHAR2(200)
+    nombre_rol varchar(100) not null,
+    descripcion varchar(200)
     primary key (id_rol)
 );
 
 CREATE TABLE Permiso(
     id_permiso integer auto_increment,
-    nombre_permiso VARCHAR2(100) CONSTRAINT nombre_permiso_nn NOT NULL,
+    nombre_permiso varchar(100) not null,
     descripcion VARCHAR(200),
-    modulo VARCHAR2(100)
+    modulo varchar(100)
     primary key(id_permiso)
 );
 
