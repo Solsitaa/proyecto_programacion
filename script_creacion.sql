@@ -10,6 +10,8 @@ create database echotech_db
 character set utf8mb4
 collate utf8mb4_general_ci;
 
+use echotech_db;
+
 CREATE TABLE Empleado(
     id_empleado integer auto_increment,
     nombre_empleado VARCHAR2(100) CONSTRAINT nombre_empleado_nn NOT NULL,
