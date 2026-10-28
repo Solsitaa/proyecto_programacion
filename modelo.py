@@ -56,22 +56,6 @@ class Departamento:
         self.__empleados.append(empleado) 
     def quitar_empleado(self,empleado : Empleado): 
         self.__empleados.remove(empleado) 
-class Registro: 
-    def __init__(self, id_r, f, hr, d):  
-        self.__id_registro= id_r  
-        self.__fecha= f  
-        self.__horas_trabajadas= hr  
-        self.__descripcion= d
-    def obtener_id_registro(self):  
-        return self.__id_registro  
-    def obtener_fecha(self):  
-        return self.__fecha 
-    def obtener_horas_trabajadas(self):  
-        return self.__horas_trabajadas  
-    def obtener_descripcion(self): 
-        return self.__descripcion  
-    def modificar_descripcion(self, d:str): 
-        self.__descripcion= d
 ##Daniel 
 class Usuario(Empleado): 
     def __init__(self,id_empleado,nombre, direccion, telefono,correo,fecha_contrato, salario, IdUsuario, NombreUsuario, Contraseña): 
@@ -145,19 +129,22 @@ class crear_departamento:
         pass  
     def crear_departamento(self): 
         pass 
-class departamento(): 
-    def __init__(self, id, nombre): 
-        self.__id_departamento = id 
-        self.__nombre_departamento = nombre 
-    def obtener_id(self): 
-        return self.__id_departamento 
-    def obtener_nombre(self): 
-        return self.__nombre_departamento 
-    def modificar_nombre(self, nombre): 
-        self.__nombre_departamento = nombre  
-    def registrar_empleado(self): 
-        pass 
-    def asignar_empleado(self): 
-        pass 
-    def reasignar_empleado (self): 
-        pass 
+#Yami
+class Registro: 
+    def __init__(self, id_r, f, hr, d):  
+        self.__id_registro= id_r  
+        self.__fecha= f  
+        self.__horas_trabajadas= hr  
+        self.__descripcion= d
+    def obtener_id_registro(self):  
+        return self.__id_registro  
+    def obtener_fecha(self):  
+        return self.__fecha 
+    def obtener_horas_trabajadas(self):  
+        return self.__horas_trabajadas  
+    def obtener_descripcion(self): 
+        return self.__descripcion  
+    def modificar_descripcion(self, d:str): 
+        self.__descripcion= d
+class proyecto:
+    def 
