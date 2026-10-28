@@ -96,40 +96,122 @@ class Permiso:
     def obtener_modulo(self): 
         return self.__modulo
 ##Jose 
-class informe: 
-    def __init__(self, empleado, proyecto, departamento, registro_de_tiempo): 
-        self.__empleado = empleado 
-        self.__proyecto = proyecto 
-        self.__departamento = departamento 
-        self.__registro_de_tiempo = registro_de_tiempo 
-    def obtener_empleado(self): 
-        return self.__empleado 
-    def obtener_proyecto(self): 
-        return self.__proyecto 
-    def obtener_departamento(self): 
-        return self.__departamento
-    def obtener_registro_de_tiempo(self): 
-        return self.__registro_de_tiempo 
-    def exportar_pdf(self): 
-        pass 
-    def exportar_excel(self): 
-        pass 
-class administrador(Empleado): 
-    def __init__(self, id_empleado,nombre, direccion, telefono,correo,fecha_contrato, salario):  
-        super().__init__(id_empleado,nombre, direccion, telefono,correo,fecha_contrato, salario) 
-    def generar_informe(): 
-        pass 
-class crear_departamento: 
-    def __init__(self, id): 
-        self.__id_departamento = id 
-    def busqueda_departamento(self): 
-        pass 
-    def eliminar_departamento(self): 
-        pass 
-    def editar_departamento(self): 
-        pass  
-    def crear_departamento(self): 
-        pass 
+class Departamento(ActiveRecord):
+    def __init__(self, id: int, nombre: str):
+        self.__id_departamento = id
+        self.__nombre = nombre
+        self.__gerente = None 
+        self.__empleados = list() 
+
+    def obtener_id(self):
+        return self.__id_departamento
+
+    def obtener_nombre(self):
+        return self.__nombre
+
+    def modificar_nombre(self, nombre: str):
+        self.__nombre = nombre
+
+    def obtener_gerente(self):
+        return self.__gerente
+
+    def modificar_gerente(self, gerente):
+        self.__gerente = gerente
+
+    def obtener_empleados(self):
+        return self.__empleados
+
+    def asignar_empleado(self, empleado):
+        self.__empleados.append(empleado)
+
+    def quitar_empleado(self, empleado):
+        self.__empleados.remove(empleado)
+
+    def __str__(self):
+        return f"Departamento {self.__nombre}"
+
+    @classmethod
+    def buscar_todos(cls) -> list[Departamento]:
+        cnn = Conexion().obtener_conexion()
+        cursor = cnn.cursor()
+        sql = "SELECT id_departamento, nombre FROM departamento ORDER BY nombre"
+        cursor.execute(sql)
+        filas = cursor.fetchall()
+        cursor.close()
+        departamentos = list()
+        for fila in filas:
+            departamentos.append(cls(fila[0], fila[1]))
+            return departamentos
+
+    @classmethod
+    def buscar_por_id(cls, id) -> Departamento:
+        cnn = Conexion().obtener_conexion()
+        cursor = cnn.cursor()
+        sql = "SELECT id_departamento, nombre FROM departamento WHERE id_departamento = %s"
+        cursor.execute(sql, (id,))
+        registro = cursor.fetchone()
+        cursor.close()
+        if registro:
+            return cls(registro[0], registro[1])
+        else:
+            return None
+
+    def guardar(self):
+        cnn = Conexion().obtener_conexion()
+        cursor = cnn.cursor()
+        sql = "INSERT INTO departamento (nombre) VALUES (%s)"
+        cursor.execute(sql, (self.__nombre,))
+        cnn.commit()
+        cursor.close()
+
+    def actualizar(self):
+        cnn = Conexion().obtener_conexion()
+        cursor = cnn.cursor()
+        sql = "UPDATE departamento SET nombre = %s WHERE id_departamento = %s"
+        cursor.execute(sql, (self.__nombre, self.__id_departamento))
+        cnn.commit()
+        cursor.close()
+
+    def eliminar(self):
+        cnn = Conexion().obtener_conexion()
+        cursor = cnn.cursor()
+        sql = "DELETE FROM departamento WHERE id_departamento = %s"
+        cursor.execute(sql, (self.__id_departamento,))
+        cnn.commit()
+        cursor.close()
+
+
+class Informe:
+    def __init__(self, empleados: list, proyectos: list, departamentos: list, registros: list):
+        self.__empleados = empleados
+        self.__proyectos = proyectos
+        self.__departamentos = departamentos
+        self.__registros = registros
+
+def obtener_empleados(self):
+    return self.__empleados
+
+def obtener_proyectos(self):
+    return self.__proyectos
+
+def obtener_departamentos(self):
+    return self.__departamentos
+
+def obtener_registros(self):
+    return self.__registros
+
+def exportar_excel(self, ruta: str = "informe.csv") -> str:
+    pass
+
+def exportar_pdf(self, ruta: str = "informe.pdf") -> str:
+    pass
+#pendiente
+
+#Administrador
+class Administrador(Empleado):
+    def generar_informe(self, empleados: list, proyectos: list, registros: list) -> Informe:
+        departamentos = Departamento.buscar_todos()
+        return Informe(empleados, proyectos, departamentos, registros)
 #Yami
 class registro: 
     def __init__(self, id_r, f, hr, d):  
