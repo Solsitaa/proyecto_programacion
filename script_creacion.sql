@@ -57,3 +57,10 @@ CREATE TABLE rol_permiso (
     FOREIGN KEY (id_rol) REFERENCES Rol(id_rol) ON DELETE CASCADE,
     FOREIGN KEY (id_permiso) REFERENCES Permiso(id_permiso) ON DELETE CASCADE
 );
+
+-- Agregar a script_creacion.sql
+create table departamento (
+id_departamento integer auto_increment,
+nombre varchar(100) not null,
+primary key (id_departamento)
+);
