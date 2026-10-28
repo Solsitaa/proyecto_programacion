@@ -146,5 +146,4 @@ class Registro:
         return self.__descripcion  
     def modificar_descripcion(self, d:str): 
         self.__descripcion= d
-class proyecto:
-    def 
+#class proyecto:
