@@ -74,7 +74,7 @@ class Empleado(ActiveRecord):
             cnn = Conexion().obtener_conexion()
             cursor = cnn.cursor()
             sql = "UPDATE Empleado SET nombre_empleado = %s, apellido_empleado = %s, direccion = %s, numero_de_telefono = %s, correo = %s, fecha_contrato = %s WHERE id_empleado = %s"
-            cursor.execute(sql, (self.__nombre, self.__apellido, self.__id))
+            cursor.execute(sql, (self.__nombre, self.__apellido, self.__direccion,self.__telefono,self.__correo,self.__contrato,self.__salario))
             cnn.commit()
             cursor.close()
 

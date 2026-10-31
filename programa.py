@@ -111,18 +111,23 @@ def gestion_empleado(parent: tk.Tk) -> None:
             Empleado(None, nombre, apellido, direccion,telefono,correo,fecha,salario).guardar()
             cargar()
         except Exception as e:
-            messagebox.showerror("Error", f"Error al ingresar la especialidad\n{e}", parent=ventana)
+            messagebox.showerror("Error", f"Error al ingresar al empleado\n{e}", parent=ventana)
 
     def modificar() -> None:
         seleccion = tabla.selection()
         if not seleccion:
-            messagebox.showerror("Error", "Seleccionar primero una especialidad", parent=ventana)
+            messagebox.showerror("Error", "Seleccionar primero un empleado", parent=ventana)
         else:
             id_empleado = int(tabla.item(seleccion[0], "values")[0])
             try:
                 nombre = entry_nombre.get()
                 apellido = entry_apellido.get()
-                Empleado(id_empleado, nombre, apellido).actualizar()
+                direccion = entry_direccion.get()
+                telefono = entry_telefono.get()
+                correo = entry_correo.get()
+                fecha = entry_fecha_contrato.get()
+                salario = entry_salario.get()
+                Empleado(id_empleado, nombre, apellido,direccion,telefono,correo,fecha,salario).actualizar()
             except Exception as e:
                 messagebox.showerror("Error", f"Error al modificar\n{e}", parent=ventana)
         cargar()
@@ -131,7 +136,7 @@ def gestion_empleado(parent: tk.Tk) -> None:
     def eliminar() -> None:
             seleccion = tabla.selection()
             if not seleccion:
-                messagebox.showerror("Error", "Seleccionar primero una especialidad", parent=ventana)
+                messagebox.showerror("Error", "Seleccionar primero un empleado", parent=ventana)
             else:
                 if messagebox.askyesno("Confirmación", "¿Está seguro?", parent=ventana):
                     id_empleado = int(tabla.item(seleccion[0], "values")[0])  
