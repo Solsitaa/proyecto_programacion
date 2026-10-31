@@ -90,7 +90,7 @@ class Empleado(ActiveRecord):
             cnn = Conexion().obtener_conexion()
             cursor = cnn.cursor()
             sql = "INSERT INTO Empleado (nombre_empleado, apellido_empleado, direccion, numero_de_telefono, correo, fecha_contrato, salario) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql, (self.__nombre, self.__apellido))
+            cursor.execute(sql, (self.__nombre, self.__apellido, self.__direccion,self.__telefono,self.__correo,self.__contrato,self.__salario))
             cnn.commit()
             cursor.close()
 

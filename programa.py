@@ -103,8 +103,12 @@ def gestion_empleado(parent: tk.Tk) -> None:
         nombre = entry_nombre.get()
         apellido = entry_apellido.get()
         direccion = entry_direccion.get()
+        telefono = entry_telefono.get()
+        correo = entry_correo.get()
+        fecha = entry_fecha_contrato.get()
+        salario = entry_salario.get()
         try:
-            Empleado(None, nombre, apellido, direccion).guardar()
+            Empleado(None, nombre, apellido, direccion,telefono,correo,fecha,salario).guardar()
             cargar()
         except Exception as e:
             messagebox.showerror("Error", f"Error al ingresar la especialidad\n{e}", parent=ventana)
