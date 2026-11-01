@@ -162,6 +162,46 @@ def gestion_empleado(parent: tk.Tk) -> None:
 
     cargar()
 
+def gestion_departamento(parent: tk.Tk) -> None:
+    ventana = tk.Toplevel(parent)
+    ventana.title("Gestión de departamentos")
+    ventana.geometry("1600x1000")
+
+    label_nombre = tk.Label(ventana, text="Nombre:")
+    label_nombre.grid(row=0, column=0, pady=10, padx=5)
+    entry_nombre = tk.Entry(ventana)
+    entry_nombre.grid(row=0, column=1, pady=10, padx=5, columnspan=3, sticky="we")
+    
+    label_apellido = tk.Label(ventana, text="Apellido:")
+    label_apellido.grid(row=1, column=0, pady=10, padx=5)
+    entry_apellido = tk.Entry(ventana)
+    entry_apellido.grid(row=1, column=1, pady=10, padx=5, columnspan=3, sticky="we")
+
+    label_direccion = tk.Label(ventana, text="Direccion:")
+    label_direccion.grid(row=2, column=0, pady=10, padx=5)
+    entry_direccion = tk.Entry(ventana)
+    entry_direccion.grid(row=2, column=1, pady=10, padx=5, columnspan=3, sticky="we")
+    
+    label_telefono = tk.Label(ventana, text="Telefono:")
+    label_telefono.grid(row=3, column=0, pady=10, padx=5)
+    entry_telefono = tk.Entry(ventana)
+    entry_telefono.grid(row=3, column=1, pady=10, padx=5, columnspan=3, sticky="we")
+    
+    label_correo = tk.Label(ventana, text="Correo:")
+    label_correo.grid(row=4, column=0, pady=10, padx=5)
+    entry_correo = tk.Entry(ventana)
+    entry_correo.grid(row=4, column=1, pady=10, padx=5, columnspan=3, sticky="we")
+    
+    label_fecha_contrato = tk.Label(ventana, text="Fecha Contrato:")
+    label_fecha_contrato.grid(row=5, column=0, pady=10, padx=5)
+    entry_fecha_contrato = tk.Entry(ventana)
+    entry_fecha_contrato.grid(row=5, column=1, pady=10, padx=5, columnspan=3, sticky="we")
+    
+    label_salario = tk.Label(ventana, text="Salario:")
+    label_salario.grid(row=6, column=0, pady=10, padx=5)
+    entry_salario = tk.Entry(ventana)
+    entry_salario.grid(row=6, column=1, pady=10, padx=5, columnspan=3, sticky="we")
+
 def test() -> None:
     cursor = None
     try:
@@ -187,9 +227,13 @@ def main():
     boton_test = tk.Button(ventana, text="Probar conexión", width=30, command=test)
     boton_test.pack(pady=10)
 
-    boton_especialidad = tk.Button(ventana, text="Gestionar empleados", width=30,
+    boton_empleados = tk.Button(ventana, text="Gestionar empleados", width=30,
                                        command=lambda:gestion_empleado(ventana))
-    boton_especialidad.pack(pady=10)
+    boton_empleados.pack(pady=10)
+
+    boton_departamentos = tk.Button(ventana, text="Gestionar Departamentos", width=30,
+                                        command=lambda:gestion_departamento(ventana))
+    boton_departamentos.pack(pady=10)
 
     boton_salir = tk.Button(ventana, text="Cerrar", width=20, command=ventana.destroy)
     boton_salir.pack(pady=10)
