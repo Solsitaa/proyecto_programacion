@@ -1,4 +1,5 @@
-from datetime import date 
+from __future__ import annotations
+import datetime as dt
 from db import ActiveRecord, Conexion
 
 class Empleado(ActiveRecord): 
@@ -34,8 +35,8 @@ class Empleado(ActiveRecord):
         self.__telefono = telefono  
     def modificar_correo(self, correo: str): 
         self.__correo = correo 
-    def modificar_fecha_contrato(self, fecha_contrato: date):  
-        self._contrato= fecha_contrato  
+    def modificar_fecha_contrato(self, fecha_contrato: dt.datetime):  
+        self.__contrato = fecha_contrato  
     def modificar_salario(self, salario: int):  
         self.__salario=salario     
     def __str__(self): 
@@ -43,12 +44,9 @@ class Empleado(ActiveRecord):
 
     @classmethod
     def buscar_todos(cls) -> list[Empleado]:
-        print("Ejecutando buscar_todos NUEVO")
         cnn = Conexion().obtener_conexion()
         cursor = cnn.cursor()
-        print("se creo el cursor")
         sql = "SELECT id_empleado, nombre_empleado, apellido_empleado, direccion, numero_de_telefono, correo, fecha_contrato, salario FROM Empleado ORDER BY nombre_empleado"
-        print("se ejecuto el sql")
         cursor.execute(sql)
         filas = cursor.fetchall()
         cursor.close()
@@ -66,15 +64,15 @@ class Empleado(ActiveRecord):
         registro = cursor.fetchone()
         cursor.close()
         if registro:
-            return cls(registro[0], registro[1], registro[2])
+            return cls(registro[0], registro[1], registro[2], registro[3], registro[4], registro[5], registro[6], registro[7])
         else:
             return None
 
     def actualizar(self):
             cnn = Conexion().obtener_conexion()
             cursor = cnn.cursor()
-            sql = "UPDATE Empleado SET nombre_empleado = %s, apellido_empleado = %s, direccion = %s, numero_de_telefono = %s, correo = %s, fecha_contrato = %s WHERE id_empleado = %s"
-            cursor.execute(sql, (self.__nombre, self.__apellido, self.__direccion,self.__telefono,self.__correo,self.__contrato,self.__salario))
+            sql = "UPDATE Empleado SET nombre_empleado = %s, apellido_empleado = %s, direccion = %s, numero_de_telefono = %s, correo = %s, fecha_contrato = %s, salario = %s WHERE id_empleado = %s"
+            cursor.execute(sql, (self.__nombre, self.__apellido, self.__direccion,self.__telefono,self.__correo,self.__contrato,self.__salario,self.__id))
             cnn.commit()
             cursor.close()
 
@@ -94,28 +92,6 @@ class Empleado(ActiveRecord):
             cnn.commit()
             cursor.close()
 
-class Departamento:  
-    def __init__(self, id_d,nd,g,e):  
-        self.__id_departamento=id_d  
-        self.__nombre_dep=nd  
-        self.__gerente= g  
-        self.__empleados: list[Empleado] = list() 
-    def obtener_id_departamento(self):  
-        return self.__id_departamento  
-    def obtener_nombre_dep(self):  
-        return self.__nombre_dep 
-    def obtener_gerente(self): 
-        return self.__gerente  
-    def obtener_empleado(self):  
-        return self.__empleado  
-    def modificar_nom_dep(self, nd: str ):  
-        self.__nombre_dep=nd  
-    def modificar_gerente(self, g:str):  
-        self.__gerente=g 
-    def agregar_empleado(self,empleado : Empleado): 
-        self.__empleados.append(empleado) 
-    def quitar_empleado(self,empleado : Empleado): 
-        self.__empleados.remove(empleado) 
 ##Daniel 
 class Usuario(Empleado): 
     def __init__(self,id_empleado,nombre, direccion, telefono,correo,fecha_contrato, salario, IdUsuario, NombreUsuario, Contraseña): 
@@ -193,14 +169,14 @@ class Departamento(ActiveRecord):
     def buscar_todos(cls) -> list[Departamento]:
         cnn = Conexion().obtener_conexion()
         cursor = cnn.cursor()
-        sql = "SELECT id_departamento, nombre FROM departamento ORDER BY nombre"
+        sql = "SELECT id_departamento, nombre FROM departamento ORDER BY id_departamento"
         cursor.execute(sql)
         filas = cursor.fetchall()
         cursor.close()
         departamentos = list()
         for fila in filas:
             departamentos.append(cls(fila[0], fila[1]))
-            return departamentos
+        return departamentos
 
     @classmethod
     def buscar_por_id(cls, id) -> Departamento:
@@ -247,24 +223,23 @@ class Informe:
         self.__departamentos = departamentos
         self.__registros = registros
 
-def obtener_empleados(self):
-    return self.__empleados
+    def obtener_empleados(self):
+        return self.__empleados
 
-def obtener_proyectos(self):
-    return self.__proyectos
+    def obtener_proyectos(self):
+        return self.__proyectos
 
-def obtener_departamentos(self):
-    return self.__departamentos
+    def obtener_departamentos(self):
+        return self.__departamentos
 
-def obtener_registros(self):
-    return self.__registros
+    def obtener_registros(self):
+        return self.__registros
 
-def exportar_excel(self, ruta: str = "informe.csv") -> str:
-    pass
+    def exportar_excel(self, ruta: str = "informe.csv") -> str:
+        pass
 
-def exportar_pdf(self, ruta: str = "informe.pdf") -> str:
-    pass
-#pendiente
+    def exportar_pdf(self, ruta: str = "informe.pdf") -> str:
+        pass  # pendiente
 
 #Administrador
 class Administrador(Empleado):
@@ -272,7 +247,7 @@ class Administrador(Empleado):
         departamentos = Departamento.buscar_todos()
         return Informe(empleados, proyectos, departamentos, registros)
 #Yami
-class Registro: 
+class registro: 
     def __init__(self, id_r, f, hr, d):  
         self.__id_registro= id_r  
         self.__fecha= f  
@@ -288,4 +263,78 @@ class Registro:
         return self.__descripcion  
     def modificar_descripcion(self, d:str): 
         self.__descripcion= d
-#class proyecto:
+class proyecto(ActiveRecord):
+    def __init__(self, id_proyecto: int, nombre_proyecto:str, descripcion: str, fecha_inicio: dt.datetime):
+        self.__id_proyecto = id_proyecto
+        self.__nombre_proyecto= nombre_proyecto
+        self.__descripcion = descripcion
+        self.__fecha_inicio = fecha_inicio
+
+    def obtener_id_proyecto(self):
+        return self.__id_proyecto
+
+    def obtener_nombre(self):
+        return self.__nombre_proyecto
+    
+    def modificar_nombre(self, nombre_proyecto: str):
+        self.__nombre_proyecto = nombre_proyecto
+
+    def obtener_descripcion(self):
+        return self.__descripcion
+
+    def modificar_descripcion(self, descripcion: str):
+        self.__descripcion = descripcion
+
+    def obtener_fecha_inicio(self):
+        return self.__fecha_inicio
+
+    def modificar_fecha_inicio(self, fecha_inicio: dt.datetime):
+        self.__fecha_inicio = fecha_inicio
+    @classmethod
+    def buscar_todos(cls) -> list["proyecto"]:
+        cnn = Conexion().obtener_conexion()
+        cursor = cnn.cursor()
+        sql = "SELECT id_proyecto, nombre, descripcion, fecha_de_inicio FROM proyecto ORBER BY nombre"
+        cursor.execute(sql)
+        filas = cursor.fetchall()
+        cursor.close()
+        proyecto= list()
+        for proyecto in filas:
+            proyecto.append(cls(proyecto[0],proyecto[1],proyecto[2],proyecto[3]))
+        return proyecto
+    @classmethod
+    def buscar_por_id(cls, id) -> "proyecto":
+        cnn = Conexion().obtener_conexion()
+        cursor = cnn.cursor()
+        sql = "SELECT id_proyecto, nombre, descripcion, fecha_inicio FROM proyecto WHERE id_proyecto = %s"
+        cursor.execute(sql, (id,))
+        registro = cursor.fetchone()
+        cursor.close()
+        if registro:
+            return cls(registro[0], registro[1], registro[2],registro[3])
+        else:
+            return None
+
+    def actualizar(self):
+        cnn = Conexion().obtener_conexion()
+        cursor = cnn.cursor()
+        sql = "UPDATE proyecto SET nombre_proyecto =%s, descripcion=%s, fecha_inicio=%s WHERE id_proyecto= %s"
+        cursor.execute(sql,(self.__nombre_proyecto,self.__descripcion,self.__fecha_inicio, self.__id_proyecto))
+        cnn.commit()
+        cnn.close()
+
+    def eliminar(self):
+        cnn = Conexion().obtener_conexion()
+        cursor = cnn.cursor()
+        sql = "DELETE FROM proyecto WHERE id_proyecto=%s"
+        cursor.execute(sql, (self.__id_proyecto,))
+        cnn.commit()
+        cursor.close()
+
+    def guardar(self):
+        cnn = Conexion().obtener_conexion()
+        cursor = cnn.cursor()
+        sql = "INSERT INTO proyecto (nombre_proyecto, descripcion, fecha_inicio) VALUES (%s,%s,%s,%s)"
+        cursor.execute(sql, (self.__nombre_proyecto,self.__descripcion,self.__fecha_inicio))
+        cnn.commit()
+        cursor.close()

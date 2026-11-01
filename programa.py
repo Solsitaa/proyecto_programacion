@@ -144,6 +144,8 @@ def gestion_empleado(parent: tk.Tk) -> None:
                         Empleado.buscar_por_id(id_empleado).eliminar() 
                     except Exception as e:
                         messagebox.showerror("Error", f"Error al eliminar\n{e}", parent=ventana)
+            cargar()
+            limpiar()
 
     # TreeViewSelect es un evento que se produce cuando se selecciona una fila
     tabla.bind("<<TreeviewSelect>>", seleccionar)
