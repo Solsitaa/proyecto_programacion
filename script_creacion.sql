@@ -74,7 +74,44 @@ CREATE TABLE rol_permiso (
         REFERENCES Permiso(id_permiso) ON DELETE CASCADE
 );
 
+<<<<<<< HEAD
 ALTER TABLE departamento
 ADD CONSTRAINT fk_departamento_gerente
 FOREIGN KEY (id_empleado_gerente)
 REFERENCES Empleado(id_empleado);
+=======
+CREATE TABLE registro {
+    id_registro integer auto_increment,
+    fecha_registro DATETIME NOT NULL,
+    horas_trabajadas integer NOT NULL,
+    descripcion varchar(200),
+    id_empleado integer NOT NULL,
+    PRIMARY KEY (id_registro),
+    constraint fk_registro_empleado FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado) ON DELETE CASCADE
+}
+
+CREATE table proyecto (
+    id_proyecto integer auto_increment,
+    nombre_proyecto varchar(100) not null,
+    descripcion varchar(200),
+    fecha_inicio DATE,
+    id_empleado integer NOT NULL,
+    PRIMARY KEY (id_proyecto),
+    constraint fk_proyecto_empleado FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado) ON DELETE CASCADE
+);
+-- Agregar a script_creacion.sql
+create table departamento (
+id_departamento integer auto_increment,
+nombre varchar(100) not null,
+gerente integer not null,
+empleado integer not null,
+id_empleado integer not null,
+--hacer las FK
+primary key (id_departamento)
+constraint fk_gerente FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado),
+constraint fk_empleado FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado)
+);
+
+create table 
+
+>>>>>>> b56d41922f31c76ff338d2197c4912722dc30d2a
