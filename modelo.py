@@ -3,7 +3,7 @@ import datetime as dt
 from db import ActiveRecord, Conexion
 
 class Empleado(ActiveRecord): 
-    def __init__(self, id_empleado,nombre, apellido, direccion, telefono,correo,fecha_contrato, salario):  
+    def __init__(self, id_empleado,nombre, apellido, direccion, telefono,correo,fecha_contrato, salario,id_departamento):  
         self.__id= id_empleado  
         self.__nombre= nombre
         self.__apellido = apellido 
@@ -12,6 +12,7 @@ class Empleado(ActiveRecord):
         self.__correo= correo  
         self.__contrato=fecha_contrato  
         self.__salario= salario
+        self.__id_departamento = id_departamento
 
     def obtener_id(self): 
         return self.__id  
@@ -28,7 +29,10 @@ class Empleado(ActiveRecord):
     def obtener_contrato(self):  
         return self.__contrato  
     def obtener_salario(self): 
-        return self.__salario  
+        return self.__salario 
+    def obtener_id_departamento(self): 
+        return self.__id_departamento
+
     def modificar_direccion(self, direccion: str):  
         self.__direccion = direccion  
     def modificar_telefono(self, telefono: str):  
@@ -38,7 +42,9 @@ class Empleado(ActiveRecord):
     def modificar_fecha_contrato(self, fecha_contrato: dt.datetime):  
         self.__contrato = fecha_contrato  
     def modificar_salario(self, salario: int):  
-        self.__salario=salario     
+        self.__salario=salario
+    def modificar_id_departamento(self, id_departamento: int):  
+            self.__id_departamento=id_departamento     
     def __str__(self): 
         return f"{self.__id} {self.__nombre}" 
 
@@ -46,33 +52,33 @@ class Empleado(ActiveRecord):
     def buscar_todos(cls) -> list[Empleado]:
         cnn = Conexion().obtener_conexion()
         cursor = cnn.cursor()
-        sql = "SELECT id_empleado, nombre_empleado, apellido_empleado, direccion, numero_de_telefono, correo, fecha_contrato, salario FROM Empleado ORDER BY nombre_empleado"
+        sql = "SELECT id_empleado, nombre_empleado, apellido_empleado, direccion, numero_de_telefono, correo, fecha_contrato, salario, id_departamento FROM Empleado ORDER BY nombre_empleado"
         cursor.execute(sql)
         filas = cursor.fetchall()
         cursor.close()
         empleados = list()
         for empleado in filas:
-            empleados.append(cls(empleado[0], empleado[1], empleado[2],empleado[3], empleado[4], empleado[5], empleado[6], empleado[7]))
+            empleados.append(cls(empleado[0], empleado[1], empleado[2],empleado[3], empleado[4], empleado[5], empleado[6], empleado[7], empleado[8]))
         return empleados
 
     @classmethod
     def buscar_por_id(cls, id) -> Empleado:
         cnn = Conexion().obtener_conexion()
         cursor = cnn.cursor()
-        sql = "SELECT id_empleado, nombre_empleado, apellido_empleado, direccion, numero_de_telefono, correo, fecha_contrato, salario FROM Empleado WHERE id_empleado = %s"
+        sql = "SELECT id_empleado, nombre_empleado, apellido_empleado, direccion, numero_de_telefono, correo, fecha_contrato, salario, id_departamento FROM Empleado WHERE id_empleado = %s"
         cursor.execute(sql, (id,))
         registro = cursor.fetchone()
         cursor.close()
         if registro:
-            return cls(registro[0], registro[1], registro[2], registro[3], registro[4], registro[5], registro[6], registro[7])
+            return cls(registro[0], registro[1], registro[2], registro[3], registro[4], registro[5], registro[6], registro[7], registro[8])
         else:
             return None
 
     def actualizar(self):
             cnn = Conexion().obtener_conexion()
             cursor = cnn.cursor()
-            sql = "UPDATE Empleado SET nombre_empleado = %s, apellido_empleado = %s, direccion = %s, numero_de_telefono = %s, correo = %s, fecha_contrato = %s, salario = %s WHERE id_empleado = %s"
-            cursor.execute(sql, (self.__nombre, self.__apellido, self.__direccion,self.__telefono,self.__correo,self.__contrato,self.__salario,self.__id))
+            sql = "UPDATE Empleado SET nombre_empleado = %s, apellido_empleado = %s, direccion = %s, numero_de_telefono = %s, correo = %s, fecha_contrato = %s, salario = %s, id_departamento = %s WHERE id_empleado = %s"
+            cursor.execute(sql, (self.__nombre, self.__apellido, self.__direccion,self.__telefono,self.__correo,self.__contrato,self.__salario,self.__id_departamento,self.__id))
             cnn.commit()
             cursor.close()
 
@@ -87,8 +93,8 @@ class Empleado(ActiveRecord):
     def guardar(self):
             cnn = Conexion().obtener_conexion()
             cursor = cnn.cursor()
-            sql = "INSERT INTO Empleado (nombre_empleado, apellido_empleado, direccion, numero_de_telefono, correo, fecha_contrato, salario) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql, (self.__nombre, self.__apellido, self.__direccion,self.__telefono,self.__correo,self.__contrato,self.__salario))
+            sql = "INSERT INTO Empleado (nombre_empleado, apellido_empleado, direccion, numero_de_telefono, correo, fecha_contrato, salario,id_departamento) VALUES (%s, %s, %s, %s, %s, %s, %s,%s)"
+            cursor.execute(sql, (self.__nombre, self.__apellido, self.__direccion,self.__telefono,self.__correo,self.__contrato,self.__salario,self.__id_departamento))
             cnn.commit()
             cursor.close()
 
@@ -132,11 +138,11 @@ class Permiso:
         return self.__modulo
 ##Jose 
 class Departamento(ActiveRecord):
-    def __init__(self, id: int, nombre: str):
+    def __init__(self, id: int, nombre: str, gerente=None):
         self.__id_departamento = id
         self.__nombre = nombre
-        self.__gerente = None 
-        self.__empleados = list() 
+        self.__gerente = gerente
+        self.__empleados = list()
 
     def obtener_id(self):
         return self.__id_departamento
@@ -194,8 +200,8 @@ class Departamento(ActiveRecord):
     def guardar(self):
         cnn = Conexion().obtener_conexion()
         cursor = cnn.cursor()
-        sql = "INSERT INTO departamento (nombre) VALUES (%s)"
-        cursor.execute(sql, (self.__nombre,))
+        sql = "INSERT INTO departamento (nombre, id_empleado_gerente) VALUES (%s, %s)"
+        cursor.execute(sql, (self.__nombre,self.__gerente))
         cnn.commit()
         cursor.close()
 
