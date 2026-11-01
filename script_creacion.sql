@@ -62,5 +62,9 @@ CREATE TABLE rol_permiso (
 create table departamento (
 id_departamento integer auto_increment,
 nombre varchar(100) not null,
+gerente varchar(100),not null,
+empleado varchar(100),not null,
+--hacer las FK
 primary key (id_departamento)
 );
+
