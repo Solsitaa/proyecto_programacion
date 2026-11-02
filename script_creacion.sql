@@ -91,6 +91,8 @@ CREATE TABLE registro (
 );
 
 CREATE TABLE administrador (
-    generar_informe varchar(200) constraint pk_generar_informe PRIMARY KEY (generar_informe)
+    id_administrador constraint PK_administrador PRIMARY KEY id_administrador,
+    id_empleado integer NOT NULL,
+    constraint FK_id_empleado FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado) ON DELETE CASCADE
 );
 
