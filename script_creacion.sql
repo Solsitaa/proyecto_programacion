@@ -1,10 +1,9 @@
 DROP DATABASE IF EXISTS echotech_db;
-
 CREATE DATABASE echotech_db
+USE echotech_db;
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_general_ci;
 
-USE echotech_db;
 
 CREATE TABLE Permiso (
     id_permiso INTEGER AUTO_INCREMENT,
