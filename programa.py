@@ -1,14 +1,13 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-from tkinter import messagebox
+from tkinter import messagebox, filedialog
 from db import Conexion
-from modelo import Empleado
-from modelo import Departamento
+from modelo import Departamento, Empleado, Administrador, Informe
 
 def gestion_empleado(parent: tk.Tk) -> None:
     ventana = tk.Toplevel(parent)
     ventana.title("Gestión de empleados")
-    ventana.geometry("1920x1080")
+    ventana.geometry("1000x800")
 
     label_nombre = tk.Label(ventana, text="Nombre:")
     label_nombre.grid(row=0, column=0, pady=10, padx=5)
@@ -301,6 +300,53 @@ def gestion_departamento(parent: tk.Tk) -> None:
 
     cargar()
 
+def armar_informe() -> Informe:
+    """Crea el informe usando la clase Administrador (como en el diagrama)."""
+    # Administrador de ejemplo: hereda de Empleado, que pide 8 datos
+    admin = Administrador(None, "Administrador", "", "", "", "", None, 0)
+    empleados = Empleado.buscar_todos()
+    proyectos = []   # pendiente
+    registros = []   # pendiente
+    return admin.generar_informe(empleados, proyectos, registros)
+
+
+def generar_informe(parent) -> None:
+    ruta = filedialog.asksaveasfilename(
+        parent=parent,
+        title="Guardar informe",
+        defaultextension=".csv",
+        initialfile="informe.csv",
+        filetypes=[("Excel / CSV", "*.csv")],
+    )
+    if not ruta: 
+        return
+    try:
+        armar_informe().exportar_excel(ruta)
+        messagebox.showinfo("Informe", f"Informe guardado en:\n{ruta}", parent=parent)
+    except Exception as e:
+        messagebox.showerror("Error", f"Error al generar el informe\n{e}", parent=parent)
+
+
+def menu_administrador(parent) -> None:
+    """Ventana del administrador. Se puede abrir desde el menú principal del grupo."""
+    ventana = tk.Toplevel(parent)
+    ventana.title("Administrador")
+    ventana.geometry("300x280")
+    ventana.resizable(False, False)
+
+    titulo = tk.Label(ventana, text="Panel administrador", font=("Arial", 16, "bold"))
+    titulo.pack(pady=20, padx=15)
+
+    boton_dep = tk.Button(ventana, text="Gestionar departamentos", width=30,
+                          command=lambda: gestion_departamento(ventana))
+    boton_dep.pack(pady=10)
+
+    boton_informe = tk.Button(ventana, text="Generar informe", width=30,
+                              command=lambda: generar_informe(ventana))
+    boton_informe.pack(pady=10)
+
+    boton_cerrar = tk.Button(ventana, text="Cerrar", width=20, command=ventana.destroy)
+    boton_cerrar.pack(pady=10)
 
 def test() -> None:
     cursor = None
@@ -334,6 +380,10 @@ def main():
     boton_departamentos = tk.Button(ventana, text="Gestionar Departamentos", width=30,
                                         command=lambda:gestion_departamento(ventana))
     boton_departamentos.pack(pady=10)
+
+    boton_administrador = tk.Button(ventana, text="Prueba administrador", width=30,
+                                            command=lambda:menu_administrador(ventana))
+    boton_administrador.pack(pady=10)
 
     boton_salir = tk.Button(ventana, text="Cerrar", width=20, command=ventana.destroy)
     boton_salir.pack(pady=10)

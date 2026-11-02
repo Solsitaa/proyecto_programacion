@@ -82,12 +82,34 @@ class Empleado(ActiveRecord):
             cnn.commit()
             cursor.close()
 
+    
     def eliminar(self):
-            cnn = Conexion().obtener_conexion()
-            cursor = cnn.cursor()
-            sql = "DELETE FROM Empleado WHERE id_empleado = %s"
+        cnn = Conexion().obtener_conexion()
+        cursor = cnn.cursor()
+
+        try:
+            # Quitar al empleado como gerente de cualquier departamento
+            sql = """
+                UPDATE departamento
+                SET id_empleado_gerente = NULL
+                WHERE id_empleado_gerente = %s
+            """
             cursor.execute(sql, (self.__id,))
+
+            # Eliminar al empleado
+            sql = """
+                DELETE FROM Empleado
+                WHERE id_empleado = %s
+            """
+            cursor.execute(sql, (self.__id,))
+
             cnn.commit()
+
+        except Exception:
+            cnn.rollback()
+            raise
+
+        finally:
             cursor.close()
 
     def guardar(self):
