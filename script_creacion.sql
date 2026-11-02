@@ -40,15 +40,6 @@ CREATE TABLE Usuario (
     CONSTRAINT fk_usuario_rol FOREIGN KEY (id_rol)
         REFERENCES Rol(id_rol) ON DELETE CASCADE
 );
---CREATE TABLE usuario_rol (
- --   id_usuario INTEGER NOT NULL,
-   -- id_rol INTEGER NOT NULL,
-  --  PRIMARY KEY (id_usuario, id_rol),
-    --CONSTRAINT fk_usuario_rol_usuario FOREIGN KEY (id_usuario)
-   --     REFERENCES Usuario(id_usuario) ON DELETE CASCADE,
-   -- FOREIGN KEY (id_rol)
-   --     REFERENCES Rol(id_rol) ON DELETE CASCADE
---);
 
 CREATE TABLE departamento (
     id_departamento INTEGER AUTO_INCREMENT,
@@ -77,6 +68,16 @@ ADD CONSTRAINT fk_gerente
 FOREIGN KEY (id_gerente)
 REFERENCES Empleado(id_empleado);
 
+CREATE table proyecto (
+    id_proyecto integer auto_increment,
+    nombre_proyecto varchar(100) not null,
+    descripcion varchar(200),
+    fecha_inicio DATE,
+    id_empleado integer NOT NULL,
+    PRIMARY KEY (id_proyecto),
+    constraint fk_proyecto_empleado FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado) ON DELETE CASCADE
+);
+
 CREATE TABLE registro (
     id_registro integer auto_increment,
     fecha_registro DATETIME NOT NULL,
@@ -87,17 +88,6 @@ CREATE TABLE registro (
     PRIMARY KEY (id_registro),
     constraint fk_registro_empleado FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado) ON DELETE CASCADE,
     constraint fk_registro_proyecto FOREIGN KEY (id_proyecto) REFERENCES proyecto(id_proyecto) ON DELETE CASCADE
-);
-
-
-CREATE table proyecto (
-    id_proyecto integer auto_increment,
-    nombre_proyecto varchar(100) not null,
-    descripcion varchar(200),
-    fecha_inicio DATE,
-    id_empleado integer NOT NULL,
-    PRIMARY KEY (id_proyecto),
-    constraint fk_proyecto_empleado FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado) ON DELETE CASCADE
 );
 
 CREATE TABLE administrador (
