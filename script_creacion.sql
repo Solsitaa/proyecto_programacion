@@ -53,7 +53,7 @@ CREATE TABLE Usuario (
 CREATE TABLE departamento (
     id_departamento INTEGER AUTO_INCREMENT,
     nombre VARCHAR(100) NOT NULL,
-    id_empleado_gerente INTEGER,
+    id_gerente INTEGER,
     PRIMARY KEY (id_departamento)
 );
 
@@ -72,10 +72,9 @@ CREATE TABLE Empleado (
         REFERENCES departamento(id_departamento)
 );
 
-
 ALTER TABLE departamento
 ADD CONSTRAINT fk_gerente
-FOREIGN KEY (id_empleado_gerente)
+FOREIGN KEY (id_gerente)
 REFERENCES Empleado(id_empleado);
 
 CREATE TABLE registro (
@@ -84,10 +83,11 @@ CREATE TABLE registro (
     horas_trabajadas integer NOT NULL,
     descripcion varchar(200),
     id_empleado integer NOT NULL,
+    id_proyecto integer NOT NULL,
     PRIMARY KEY (id_registro),
-    constraint fk_registro_empleado FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado) ON DELETE CASCADE
+    constraint fk_registro_empleado FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado) ON DELETE CASCADE,
+    constraint fk_registro_proyecto FOREIGN KEY (id_proyecto) REFERENCES proyecto(id_proyecto) ON DELETE CASCADE
 );
-
 
 
 CREATE table proyecto (
@@ -98,5 +98,9 @@ CREATE table proyecto (
     id_empleado integer NOT NULL,
     PRIMARY KEY (id_proyecto),
     constraint fk_proyecto_empleado FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado) ON DELETE CASCADE
+);
+
+CREATE TABLE administrador (
+    generar_informe varchar(200) constraint pk_generar_informe PRIMARY KEY (generar_informe)
 );
 
