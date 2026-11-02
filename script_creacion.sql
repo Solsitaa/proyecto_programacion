@@ -86,7 +86,9 @@ CREATE TABLE registro (
     id_empleado integer NOT NULL,
     PRIMARY KEY (id_registro),
     constraint fk_registro_empleado FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado) ON DELETE CASCADE
-)
+);
+
+
 
 CREATE table proyecto (
     id_proyecto integer auto_increment,

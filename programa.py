@@ -239,20 +239,38 @@ def gestion_departamento(parent: tk.Tk) -> None:
                 parent=ventana
             )
 
+
     def modificar() -> None:
-            seleccion = tabla.selection()
-            if not seleccion:
-                messagebox.showerror("Error", "Seleccionar primero un deparatamento", parent=ventana)
-            else:
-                id_empleado = int(tabla.item(seleccion[0], "values")[0])
-                try:
-                    nombre = entry_nombre.get()
-                    gerente = entry_gerente.get()
-                    Departamento(id_empleado, nombre, gerente).actualizar()
-                except Exception as e:
-                    messagebox.showerror("Error", f"Error al modificar\n{e}", parent=ventana)
+        seleccion = tabla.selection()
+
+        if not seleccion:
+            messagebox.showerror(
+                "Error",
+                "Seleccionar primero un departamento",
+                parent=ventana
+            )
+            return
+
+        id_departamento = int(tabla.item(seleccion[0], "values")[0])
+
+        try:
+            nombre = entry_nombre.get()
+            gerente = entry_gerente.get()
+
+            gerente = int(gerente) if gerente else None
+
+            departamento = Departamento(id_departamento, nombre, gerente)
+            departamento.actualizar()
+
             cargar()
             limpiar()
+
+        except Exception as e:
+            messagebox.showerror(
+                "Error",
+                f"Error al modificar\n{e}",
+                parent=ventana
+            )
 
     def eliminar() -> None:
                 seleccion = tabla.selection()

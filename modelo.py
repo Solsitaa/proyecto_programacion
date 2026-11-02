@@ -175,25 +175,33 @@ class Departamento(ActiveRecord):
     def buscar_todos(cls) -> list[Departamento]:
         cnn = Conexion().obtener_conexion()
         cursor = cnn.cursor()
-        sql = "SELECT id_departamento, nombre FROM departamento ORDER BY id_departamento"
+
+        sql = "SELECT id_departamento, nombre, id_empleado_gerente FROM departamento ORDER BY id_departamento"
         cursor.execute(sql)
         filas = cursor.fetchall()
         cursor.close()
         departamentos = list()
         for fila in filas:
-            departamentos.append(cls(fila[0], fila[1]))
+            departamentos.append(cls(fila[0], fila[1], fila[2]))
         return departamentos
 
     @classmethod
     def buscar_por_id(cls, id) -> Departamento:
         cnn = Conexion().obtener_conexion()
         cursor = cnn.cursor()
-        sql = "SELECT id_departamento, nombre FROM departamento WHERE id_departamento = %s"
+
+        sql = """
+            SELECT id_departamento, nombre, id_empleado_gerente
+            FROM departamento
+            WHERE id_departamento = %s
+        """
+
         cursor.execute(sql, (id,))
         registro = cursor.fetchone()
         cursor.close()
+
         if registro:
-            return cls(registro[0], registro[1])
+            return cls(registro[0], registro[1], registro[2])
         else:
             return None
 
@@ -208,8 +216,10 @@ class Departamento(ActiveRecord):
     def actualizar(self):
         cnn = Conexion().obtener_conexion()
         cursor = cnn.cursor()
-        sql = "UPDATE departamento SET nombre = %s WHERE id_departamento = %s"
-        cursor.execute(sql, (self.__nombre, self.__id_departamento))
+        sql = "UPDATE departamento SET nombre = %s, id_empleado_gerente = %s WHERE id_departamento = %s"
+
+
+        cursor.execute(sql, (self.__nombre, self.__gerente, self.__id_departamento))
         cnn.commit()
         cursor.close()
 
