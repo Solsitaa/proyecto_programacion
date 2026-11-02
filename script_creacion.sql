@@ -80,7 +80,7 @@ ADD CONSTRAINT fk_departamento_gerente
 FOREIGN KEY (id_empleado_gerente)
 REFERENCES Empleado(id_empleado);
 
-CREATE TABLE registro {
+CREATE TABLE registro (
     id_registro integer auto_increment,
     fecha_registro DATETIME NOT NULL,
     horas_trabajadas integer NOT NULL,
@@ -88,7 +88,9 @@ CREATE TABLE registro {
     id_empleado integer NOT NULL,
     PRIMARY KEY (id_registro),
     constraint fk_registro_empleado FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado) ON DELETE CASCADE
-}
+);
+
+
 
 CREATE table proyecto (
     id_proyecto integer auto_increment,
