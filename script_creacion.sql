@@ -91,8 +91,13 @@ CREATE TABLE registro (
 );
 
 CREATE TABLE administrador (
-    id_administrador constraint PK_administrador PRIMARY KEY id_administrador,
+    id_administrador integer auto_increment,
     id_empleado integer NOT NULL,
-    constraint FK_id_empleado FOREIGN KEY (id_empleado) REFERENCES Empleado(id_empleado) ON DELETE CASCADE
+    PRIMARY KEY (id_administrador)
 );
+
+ALTER TABLE administrador
+ADD CONSTRAINT FK_id_empleado
+FOREIGN KEY (id_empleado)
+REFERENCES Empleado(id_empleado);
 
