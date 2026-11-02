@@ -1,8 +1,9 @@
 DROP DATABASE IF EXISTS echotech_db;
 CREATE DATABASE echotech_db
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_general_ci;
 USE echotech_db;
-CHARACTER SET utf8mb4
-COLLATE utf8mb4_general_ci;
+
 
 
 CREATE TABLE Permiso (
@@ -56,7 +57,7 @@ CREATE TABLE Empleado (
     correo VARCHAR(200),
     fecha_contrato DATE,
     salario DECIMAL(10,2),
-    id_departamento INT DEFAULT 1,
+    id_departamento integer NOT NULL,
     PRIMARY KEY (id_empleado),
     FOREIGN KEY (id_departamento)
         REFERENCES departamento(id_departamento)
